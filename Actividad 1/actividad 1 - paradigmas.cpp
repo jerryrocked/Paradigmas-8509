@@ -55,7 +55,6 @@ int main() {
         n3 = " ";
         n4 = " ";   
     }
- 
  	for(int i = 0; i < cont_lineas; i++){
  		cout<<nombres[i]<<nt1[i]<<nt2[i]<<nt3[i]<<nt4[i]<< endl;
 	}
