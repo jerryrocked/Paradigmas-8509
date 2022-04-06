@@ -1,7 +1,7 @@
-kevin 7 7 7 7
-Diego 6 7 7 6
-Cristiano 7 5 7 6
-Roberto 5 4 5 3
-Toño 3 2 7 6
-Messi 1 2 3 4
-Pobla 4 5 4 4
+jesus 3 4 5 6
+jose 5 6 5 4
+luis 6 7 7 6
+maria 5 5 5 5
+ana 7 7 7 7
+pedro 3 3 4 4
+pablo 4 5 4 4
