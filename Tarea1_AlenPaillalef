@@ -1,0 +1,380 @@
+#include <fstream>  // este programa se hizo en conjunto con Claudio Sanchez
+#include <iostream> // ademas este programa esta basado en los codigos que usted subio a la plataforma de blackboard.
+#include <sstream>
+#include <stdlib.h>
+#include <string>
+using namespace std;
+
+class Persona { // clase padre, las demas clases heredaran los atributos y
+                // metodos de esta.
+private:
+  struct { // Aqui se definen las variables de tipo privadas de la persona.
+    string Sexo;
+    int Edad;
+  } informacionprivada;
+
+public:
+  struct {
+  string Nombre, Rut;
+  } informacionPersonal;
+  Persona(){};            // contructor
+  ~Persona(){};           // destructor
+  void DatosPersonales(); // Metodo de solicitacion de datos personales.
+  void MostrarDatos();    // Muestra los datos que se ingresaron en
+                          // DatosPersonales.
+};
+
+void Persona::DatosPersonales() { // Solicita ingresar los datos personales,
+                                  // colocando, nombre, rut, etc.
+  cout << "Nombre : ";
+  getline(cin, informacionPersonal.Nombre);
+  cout << "Rut (Sin puntos ni guion): ";
+  getline(cin, informacionPersonal.Rut);
+  cout << "Sexo(masculino o femenino) : ";
+  cin >> informacionprivada.Sexo;
+  std::cout << "Edad : ";
+  std::cin >> informacionprivada.Edad;
+};
+void Persona::MostrarDatos() { // Imprime los datos que se solicitaron en la
+                               // funcion de mas arriba.
+  cout << "Nombre : " << informacionPersonal.Nombre << endl;
+  cout << "Rut : " << informacionPersonal.Rut << endl;
+  cout << "Sexo : " << informacionprivada.Sexo << endl;
+  cout << "Edad : ";
+  cout << informacionprivada.Edad << endl;
+};
+
+class Profesor : public virtual Persona { //creacion de clase profesor que hereda los atributos y procesos de la clase persona
+public:
+  string Clase;
+  int Cantidad;
+  Profesor(){};//contrcutor
+  ~Profesor(){};//destructor
+  void DatosProfesor();
+  void MostrarProfesor();
+  void IngresarNotas();
+};
+
+void Profesor::DatosProfesor() { // Ingreso de datos de profesor
+  int i;
+  DatosPersonales();
+  cin.ignore();
+  cout << "Ingresar la Clase: "; // ingreso de la clase la cual el profe realiza
+  getline(cin, Clase); //aqui se almzacena el ingreso de la clase del profesor
+};
+
+void Profesor::MostrarProfesor() { // muestra los datos ingresados del profesor
+  int i;
+  MostrarDatos();
+  cout << "Clase: " << Clase << endl;
+};
+
+void Profesor::IngresarNotas() { // Ingresa las notas de los estudiantes, me falto agregarlo en el main.
+  double n1, n2, n3, n4;
+  std::cout << "Ingresar nota 1 del estudiante: ";
+  std::cin >> n1;
+  std::cout << "Ingresar nota 2 del estudiante: ";
+  std::cin >> n2;
+  std::cout << "Ingresar nota 3 del estudiante: ";
+  std::cin >> n3;
+  std::cout << "Ingresar nota 4 del estudiante: ";
+  std::cin >> n4;
+};
+
+class Estudiante : public virtual Persona { //Creacion de la clase persona.
+public:
+  string Carrera; // se crea archivo de tipo string
+  Estudiante(){};//constructor
+  ~Estudiante(){};//Desctructor
+  void DatosEstudiante();
+  void MostrarEstudiante();
+};
+
+void Estudiante::DatosEstudiante() { // Metodo de ingreso de datos del estudiante
+  int i;
+  DatosPersonales();
+  cout << "Ingresar Carrera que estudia: ";
+  cin >> Carrera;
+};
+
+void Estudiante::MostrarEstudiante() { //Muestra los metodos de datos de los estudiantes
+  MostrarDatos();
+  cout << "\n Carrera : " << Carrera;
+};
+
+class Asignatura : public Profesor, public Estudiante { // Aqui se crea la Clase asignatura
+public:
+  string Seccion[10]; // se crean secuencias de caracteres con limitadores
+  string Asig[10], Codigo[10];// se crean secuencias de caracteres con limitadores
+  char Nom[40] = "Estudiante.txt";// se crean secuencias de caracteres con limitadores ademas de que se ingresara un archivo punto txt en este char
+  int cant;
+  string materia[5] = {"PROGRAMACION", "BASE DE DATOS", // se crean secuencias de caracteres con limitadores de palabras con el nombre de cada asignatura o ramo
+                       "ALGORITMO Y ESTRUCTURA DE DATOS",
+                       "DESARROLLO WEB Y MOBIL", "PARADIGMAS DE PROGRAMACION"};
+  string cod[5] = {"PR001", "BD002", "AE003", "DM004", "PP005"};// se crean secuencias de caracteres con limitadores de palabras con el nombre de cada codigo de la clase
+  Asignatura(){};// constructor
+  ~Asignatura(){};// destructor
+  void IngresarDatoEstudiante();
+  void MostrarDatoEstudiante();
+  void IngresarDatoProfesor();
+  void MostrarDatoProfesor();
+  void MostrarAsignatura();
+};
+
+void Asignatura::MostrarDatoProfesor(){ // se creo proceso para mostrar en pantalla las asignaturas y las secciones
+  string archivo("Asig.Profe"); //creo archivo de texto con el nombre de Asig.Profe
+  ofstream Ar_PROF; // Creo Ar:PROF para poder abrir y editar archivo de texto
+  MostrarProfesor(); 
+  cout << "Ingresar Cantidad de Asignaturas: " << cant << endl;// ingresar la cantidad de asignaturas
+  cout << "\nAsignaturas: \n";
+  for (int i = 0; i < cant; i++) { //imprimir valor dentro de una lista y colocar un salto de linea
+    cout << Asig[i] << endl;
+  }
+  Ar_PROF.open(archivo, std::ios_base::app); // se abre el archivo y se genera
+  for (int i = 0; i < cant; i++) {
+    Ar_PROF << Asig[i] << endl; //Se ingresa en el archivo de texto la lista
+  }
+  Ar_PROF.close(); // se cierra el archivo de texto
+};
+
+void Asignatura::IngresarDatoProfesor() {  // se crea el siguiente metodo
+  int opcion, option;
+  DatosProfesor();
+  cout << "Escriba la Cantidad de Asignaturas: ";
+  cin >> cant;
+  for (int i = 0; i < cant; ++i) { // se imprimen los siguientes strings
+    cout << "\n Seleccione las Asignaturas: ";
+    cout << "\n 1. " << materia[0];
+    cout << "\n 2. " << materia[1];
+    cout << "\n 3. " << materia[2];
+    cout << "\n 4. " << materia[3];
+    cout << "\n 5. " << materia[4];
+    cout << "\n Seleccione una Opcion: ";
+    cin >> opcion;
+    switch (opcion) {
+    case 1: {
+      Asig[i] = materia[0]; // al elegir cualquiera de estas materias, estas quedaran almacenadas en listas tipo string
+      Codigo[i] = cod[0];
+      break;
+    }
+    case 2: {
+      Asig[i] = materia[1]; // al elegir cualquiera de estas materias, estas quedaran almacenadas en listas tipo string
+      Codigo[i] = cod[1];
+      break;
+    }
+    case 3: {
+      Asig[i] = materia[2]; // al elegir cualquiera de estas materias, estas quedaran almacenadas en listas tipo string
+      Codigo[i] = cod[2];
+      break;
+    }
+    case 4: {
+      Asig[i] = materia[3]; // al elegir cualquiera de estas materias, estas quedaran almacenadas en listas tipo string
+      Codigo[i] = cod[3];
+      break;
+    }
+    case 5: {
+      Asig[i] = materia[4]; // al elegir cualquiera de estas materias, estas quedaran almacenadas en listas tipo string
+      Codigo[i] = cod[4];
+      break;
+    }
+    }
+
+    cout << "\n 1. Seccion 1";
+    cout << "\n 2. Seccion 2"; // se elije la seccion de cada ramo elegido
+    cout << "\n Seleccione la seccion: ";
+    cin >> option;
+    switch (option) {
+    case 1: {
+      Seccion[i] = "1";
+      break; // Al elegir cualquier de los 2 casos se genera un break para poder salir de aquellos 
+    }
+    case 2: {
+      Seccion[i] = "2";
+      break;
+    }
+    }
+  }
+};
+
+void Asignatura::IngresarDatoEstudiante() {// se creo proceso
+  int opcion, option; 
+  DatosEstudiante();
+  cout << "Escriba la Cantidad de Asignaturas: "; 
+  cin >> cant;
+  for (int i = 0; i < cant; i++) {
+    cout << "\n Seleccione las Asignaturas: ";// se imprimen los siguientes strings
+    cout << "\n 1. " << materia[0];
+    cout << "\n 2. " << materia[1];
+    cout << "\n 3. " << materia[2];
+    cout << "\n 4. " << materia[3];
+    cout << "\n 5. " << materia[4];
+    cout << "\n Seleccione una Opcion: ";
+    cin >> opcion;
+    switch (opcion) {
+    case 1: {
+      Asig[i] = materia[0];// al elegir cualquiera de estas materias, estas quedaran almacenadas en listas tipo string
+      Codigo[i] = cod[0];
+      break;
+    }
+    case 2: {
+      Asig[i] = materia[1];// al elegir cualquiera de estas materias, estas quedaran almacenadas en listas tipo string
+      Codigo[i] = cod[1];
+      break;
+    }
+    case 3: {
+      Asig[i] = materia[2];// al elegir cualquiera de estas materias, estas quedaran almacenadas en listas tipo string
+      Codigo[i] = cod[2];
+      break;
+    }
+    case 4: {
+      Asig[i] = materia[3];// al elegir cualquiera de estas materias, estas quedaran almacenadas en listas tipo string
+      Codigo[i] = cod[3];
+      break;
+    }
+    case 5: {
+      Asig[i] = materia[4];// al elegir cualquiera de estas materias, estas quedaran almacenadas en listas tipo string
+      Codigo[i] = cod[4];
+      break;
+    }
+    }
+    cout << "\n 1. Seccion 1";
+    cout << "\n 2. Seccion 2";
+    cout << "\n Seleccione la seccion: ";// se elije la seccion de cada ramo elegido
+    cin >> option;
+    switch (option) {
+    case 1: {
+      Seccion[i] = "1";
+      break;// Al elegir cualquier de los 2 casos se genera un break para poder salir de aquellos 
+    }
+    case 2: {
+      Seccion[i] = "2";
+      break;
+    }
+    }
+  }
+};
+void Asignatura::MostrarDatoEstudiante() {// se creo proceso para mostrar en pantalla las asignaturas y las secciones
+  string archivo("DatosRamo");//creo archivo de texto con el nombre de DatosRamo
+  ofstream Art_out;// Creo Art_out para poder abrir y editar archivo de texto
+  MostrarEstudiante(); 
+
+  cout << "\nAsignaturas: \n"; // ingresar la cantidad de asignaturas
+  for (int i = 0; i < cant; i++) {//imprimir valor dentro de una lista y colocar un salto de linea
+    cout << Asig[i] << endl;
+    cout << Codigo[i] << endl;
+    cout << Seccion[i] << endl;
+  }
+  Art_out.open(archivo, std::ios_base::app);
+  for (int i = 0; i < cant; i++) {//Se ingresa en el archivo de texto la lista
+    Art_out << Asig[i] << endl;
+    Art_out << Codigo[i] << endl;
+    Art_out << Seccion[i] << endl;
+  }
+  Art_out.close();
+};
+void Asignatura::MostrarAsignatura() {// este archivo muestra las asignaturas
+  cout << materia[0];
+  cout << " " << cod[0] << endl;
+  cout << materia[1];
+  cout << " " << cod[1] << endl;
+  cout << materia[2];
+  cout << " " << cod[2] << endl;
+  cout << materia[3];
+  cout << " " << cod[3] << endl;
+  cout << materia[4];
+  cout << " " << cod[4] << endl;
+};
+
+int main() {
+  Asignatura as;
+  int option, option2;
+  cout << "Sistema de Notas \n";
+  cout << "1. Profesor: \n";
+  cout << "2. Estudiante: \n";     // Le pide al usuario que ingrese algun valor para poder ingresar en el programa
+  cout << "3. Salir \n";
+  cout << "Seleccionar Opcion: ";
+  cin >> option;
+  cin.ignore();
+  switch (option) {
+  case 1:
+    as.IngresarDatoProfesor();
+    as.MostrarDatoProfesor();
+      cout << "\n Ingresar notas de estudiantes: \n";
+      cout << "11. SI, porfavor: \n";
+      cout << "12. No, porfavor: \n";
+      cout << "Seleccionar Opcion: ";
+      cin >> option2;
+      cin.ignore();
+      switch (option2) {
+      case 11:{ // cree otro case con potion 2 para hacer ingreso de notas y calculo de promedios.
+        double num1, num2, num3, num4;
+        Asignatura cur;
+        string nombreArchivo = "tex.txt";
+        ifstream archivo(nombreArchivo.c_str());
+        string linea, nomb, n1, n2, n3, n4;
+        int res, j, i = 0, lon;
+        string arreglo[100];
+        char b, l;
+        float prom;
+        // Obtener línea de archivo, y almacenar contenido en "linea"
+        while (getline(archivo, linea)) {
+          // Lo vamos imprimiendo
+          // cout << "Una línea: ";
+          cout << linea << endl;
+          lon = linea.length();
+          // cout<<" "<<lon;
+          for (j = 0; j < lon; j++) {
+
+            l = linea[j];
+            b = ' ';  // esta incompleto y faltan agregarle metodos pero el programa se ejecuta sin errores.
+            if (l != b) {
+              if (i == 0)
+                nomb = nomb + linea[j];
+              if (i == 1)
+                n1 = n1 + linea[j];
+              if (i == 2)
+                n2 = n2 + linea[j];
+              if (i == 3)
+                n3 = n3 + linea[j];
+              if (i == 4)
+                n4 = n4 + linea[j];
+            } else {
+              i++;
+            }
+          }
+
+          istringstream(n1) >> num1;
+          istringstream(n2) >> num2;
+          istringstream(n3) >> num3;
+          istringstream(n4) >> num4;
+          prom = (num1 + num2 + num3 + num4) / 4;
+          cout << nomb << endl;
+          cout << n1 << endl;
+          cout << n2 << endl;
+          cout << n3 << endl;
+          cout << n4 << endl;
+          cout << "Promedio" << prom << endl;
+          i = 0;
+          nomb = " ";
+          n1 = " ";
+          n2 = " ";
+          n3 = " ";
+          n4 = " ";
+        }
+      cur.MostrarAsignatura(); 
+      break;
+      }
+      case 12:
+        break;
+      }
+    break;
+  case 2:
+    as.IngresarDatoEstudiante();
+    as.MostrarDatoEstudiante();
+    break;
+  case 3:
+    cout << "Saliendo del sistema";
+  }
+
+  return 0;
+}
